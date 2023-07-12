@@ -20,7 +20,6 @@ describe("FundMe", async function () {
             "MockV3Aggregator",
             deployer,
         )
-        // my name is chizitere
     })
     describe("constructor", async function () {
         it("sets the aggregator addresses correctly", async function () {
