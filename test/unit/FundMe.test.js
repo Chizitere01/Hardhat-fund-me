@@ -14,9 +14,9 @@ describe("FundMe", async function () {
         deployer = (await getNamedAccounts()).deployer // extract just the deployer from the getnamed account function.
         await deployments.fixture(["all"])
 
-        fundMe = await ethers.getContractAt("FundMe", deployer) // connect the deployer
+        fundMe = await ethers.getContract("FundMe", deployer) // connect the deployer
 
-        mockV3Aggregator = await ethers.getContractAt(
+        mockV3Aggregator = await ethers.getContract(
             "MockV3Aggregator",
             deployer,
         )
