@@ -1,9 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox")
-require("hardhat-deploy")
-require("solidity-coverage")
-require("hardhat-gas-reporter")
 require("dotenv").config()
-require("@nomicfoundation/hardhat-verify")
 require("hardhat-deploy")
 
 /** @type import('hardhat/config').HardhatUserConfig */
