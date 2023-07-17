@@ -16,17 +16,17 @@ contract FundMe {
     using PriceConverter for uint256;
     uint256 public constant MINIMUM_USD = 50 * 1e18;
 
-    address[] public funders;
-    mapping(address => uint256) public addressToAmountFunded;
+    address[] private s_funders;
+    mapping(address => uint256) private s_addressToAmountFunded;
 
-    address public immutable i_owner;
+    address private immutable i_owner;
 
-    AggregatorV3Interface public priceFeed;
+    AggregatorV3Interface public s_priceFeed;
 
     // constructor function is the function that automatically gets called when we deploy our contract
     constructor(address priceFeedAddress) {
         i_owner = msg.sender;
-        priceFeed = AggregatorV3Interface(priceFeedAddress);
+        s_priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     function fund() public payable {
@@ -35,11 +35,11 @@ contract FundMe {
         //Payable keywird is added to the function to make it fir to transact funds
 
         require(
-            msg.value.getConversionRate(priceFeed) >= MINIMUM_USD,
+            msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD,
             "Didn't send enough"
         ); // 1e18 == 1*10 **18 == 1000000000000000000
-        funders.push(msg.sender);
-        addressToAmountFunded[msg.sender] += msg.value;
+        s_funders.push(msg.sender);
+        s_addressToAmountFunded[msg.sender] += msg.value;
         //msg.value is going to have 18 decimal places
         // require keyword is a checker, it says: is msg.value greater than 1? if not it will revert and send the red message
         // What is reverting?
@@ -49,10 +49,10 @@ contract FundMe {
     // the code in the comment below is used to get the get the version of interfaces
     // function getVersion() public view returns (uint256) {
     //     // ETH/USD price feed address of Sepolia Network.
-    //     AggregatorV3Interface priceFeed = AggregatorV3Interface(
+    //     AggregatorV3Interface s_priceFeed = AggregatorV3Interface(
     //         0x694AA1769357215DE4FAC081bf1f309aDC325306
     //     );
-    //     return priceFeed.version();
+    //     return s_priceFeed.version();
     // }
 
     function withdraw() public {
@@ -61,15 +61,15 @@ contract FundMe {
         /* starting index, ending index, step amount*/
         for (
             uint256 funderIndex = 0;
-            funderIndex < funders.length;
+            funderIndex < s_funders.length;
             funderIndex++
         ) {
             //code
-            address funder = funders[funderIndex];
-            addressToAmountFunded[funder] = 0;
+            address funder = s_funders[funderIndex];
+            s_addressToAmountFunded[funder] = 0;
         }
 
-        funders = new address[](0); // this is to reset the array
+        s_funders = new address[](0); // this is to reset the array
         /*
         now to actually withdraw the funds
         //transfer,
@@ -88,6 +88,22 @@ contract FundMe {
         require(callSuccess, "Call failed");
     }
 
+    function cheaperWithdraw() public payable onlyOwner {
+        address[] memory funders = s_funders;
+        //mappings can't be in memory
+        for (
+            uint256 funderIndex = 0;
+            funderIndex < funders.length;
+            funderIndex++
+        ) {
+            address funder = funders[funderIndex];
+            s_addressToAmountFunded[funder] = 0;
+        }
+        s_funders = new address[](0);
+        (bool success, ) = i_owner.call{value: address(this).balance}("");
+        require(success);
+    }
+
     modifier onlyOwner() {
         //require(msg.sender == i_owner, "Sender is not Owner!");
         if (msg.sender != i_owner) {
@@ -103,5 +119,23 @@ contract FundMe {
 
     fallback() external payable {
         fund();
+    }
+
+    function getOwner() public view returns (address) {
+        return i_owner;
+    }
+
+    function getFunder(uint256 index) public view returns (address) {
+        return s_funders[index];
+    }
+
+    function getAddressToAmountFunded(
+        address funder
+    ) public view returns (uint256) {
+        return s_addressToAmountFunded[funder];
+    }
+
+    function getPriceFeed() public view returns (AggregatorV3Interface) {
+        return s_priceFeed;
     }
 }

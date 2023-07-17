@@ -1,6 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox")
 require("dotenv").config()
 require("hardhat-deploy")
+require("hardhat-gas-reporter")
 
 /** @type import('hardhat/config').HardhatUserConfig */
 
@@ -30,11 +31,11 @@ module.exports = {
         apiKey: ETHERSCAN_API_KEY,
     },
     gasReporter: {
-        enabled: false,
+        enabled: true,
         outputFile: "gas-report.txt", // this enables us to export the report to a separate file.
         noColors: true,
         currency: "USD",
-        coinmarketcap: COINMARKETCAP_API_KEY,
+        //coinmarketcap: COINMARKETCAP_API_KEY,
     },
     namedAccounts: {
         deployer: {
