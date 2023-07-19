@@ -55,7 +55,7 @@ contract FundMe {
     //     return s_priceFeed.version();
     // }
 
-    function withdraw() public {
+    function withdraw() public onlyOwner {
         //for loop
         //[1, 2, 3, 4]
         /* starting index, ending index, step amount*/
