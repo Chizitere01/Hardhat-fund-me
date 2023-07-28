@@ -38,21 +38,7 @@ To deploy the Fund Me smart contract on your local development environment or th
 
 3. The address of a funded Chainlink Price Feed contract.
 
-### Running the DApp
 
-To run the decentralized application:
-
-1. Ensure you have the required dependencies installed and the smart contract deployed on the desired network.
-
-2. Navigate to the `frontend` directory.
-
-3. Install the necessary dependencies using `npm install`.
-
-4. Update the `contractAddress` in the `fundme.js` file with the deployed smart contract address.
-
-5. Run the DApp using `npm start`.
-
-6. Visit `http://localhost:3000` in your web browser to access the DApp.
 
 ## Security Considerations
 
