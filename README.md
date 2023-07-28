@@ -66,4 +66,4 @@ This project is for educational and informational purposes only. Use it at your 
 
 This Fund Me Smart Contract project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute the code as per the terms of the license.
 
-For any questions, feedback, or contributions, please contact [Your Contact Email]. Happy funding!
+For any questions, feedback, or contributions, please contact chizzit45@gmail.com. Happy funding!
